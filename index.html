@@ -139,7 +139,7 @@
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    // Basic anti-spam: disable button briefly
+    // Basic anti-spam: disable button brieflys
     const btn = form.querySelector("button[type='submit']");
     btn.disabled = true;
     statusEl.textContent = "Sending...";
