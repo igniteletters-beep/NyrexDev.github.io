@@ -83,10 +83,26 @@
     </section>
 
     <footer>
-      <p>© Nyrex — Roblox Systems Developer</p>
-    </footer>
+  <p>© Nyrex — Roblox Systems Developer</p>
+
+  <div class="socials">
+    <a href="https://x.com/IgniteLetters" target="_blank" rel="noopener">
+      X / Twitter
+    </a>
+
+    <button class="discord" onclick="copyDiscord()">
+      Discord: nyrexdev
+    </button>
+  </div>
+</footer>
 
   </main>
+<script>
+  function copyDiscord() {
+    navigator.clipboard.writeText("nyrexdev");
+    alert("Discord username copied!");
+  }
+</script>
 
 </body>
 </html>
