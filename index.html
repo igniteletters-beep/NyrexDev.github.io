@@ -84,7 +84,9 @@
 
 <section class="card">
   <h3>Contact</h3>
-  <p class="muted">Send a message about your project. I reply on Discord (nyrexdev).</p>
+  <p class="muted">
+  Send a message about your project. Discord username required. i will contact you on discord
+</p>
 
   <form id="contactForm" class="contact-form">
     <label>
@@ -93,9 +95,14 @@
     </label>
 
     <label>
-      Your Discord (optional)
-      <input name="discord" type="text" placeholder="e.g. alexdev" />
-    </label>
+  Your Discord username
+  <input
+    name="discord"
+    type="text"
+    placeholder="e.g. alexdev"
+    required
+  />
+</label>
 
     <label>
       Message
@@ -130,7 +137,7 @@
 </script>
 
 <script>
-  // ✅ Paste your Discord webhook URL here:
+  // IMPORTANT: paste your Discord webhook URL here (from your Discord channel integrations)
   const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1467096070592008278/BDdr1871DQNd_BKgZv8av62VgzGixam8aNxmU4iuI-wE2fvMEAS0d7B5zWk0xNZHi5QP";
 
   const form = document.getElementById("contactForm");
@@ -139,20 +146,31 @@
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    // Basic anti-spam: disable button brieflys
     const btn = form.querySelector("button[type='submit']");
     btn.disabled = true;
     statusEl.textContent = "Sending...";
 
     const data = new FormData(form);
     const name = (data.get("name") || "").toString().trim();
-    const discord = (data.get("discord") || "").toString().trim();
+    const discord = (data.get("discord") || "").toString().trim(); // REQUIRED
     const message = (data.get("message") || "").toString().trim();
+
+    // Extra safety checks (even though HTML already enforces required)
+    if (!discord) {
+      statusEl.textContent = "Discord username is required.";
+      btn.disabled = false;
+      return;
+    }
+    if (!message) {
+      statusEl.textContent = "Message is required.";
+      btn.disabled = false;
+      return;
+    }
 
     const content =
       `📩 **New Portfolio Message**\n` +
-      `**Name:** ${name}\n` +
-      (discord ? `**Discord:** ${discord}\n` : "") +
+      `**Name:** ${name || "N/A"}\n` +
+      `**Discord:** ${discord}\n\n` +
       `**Message:**\n${message}`;
 
     try {
@@ -167,12 +185,14 @@
       form.reset();
       statusEl.textContent = "Sent! I’ll reply on Discord.";
     } catch (err) {
-      statusEl.textContent = "Error sending. Try again later or contact me on Discord: nyrexdev";
+      statusEl.textContent =
+        "Error sending. Try again later or contact me on Discord: nyrexdev";
     } finally {
       btn.disabled = false;
     }
   });
 </script>
+
   
 </body>
 </html>
