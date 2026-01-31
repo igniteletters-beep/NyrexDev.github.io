@@ -82,6 +82,31 @@
       </ul>
     </section>
 
+<section class="card">
+  <h3>Contact</h3>
+  <p class="muted">Send a message about your project. I reply on Discord (nyrexdev).</p>
+
+  <form id="contactForm" class="contact-form">
+    <label>
+      Your name
+      <input name="name" type="text" placeholder="e.g. Alex" required />
+    </label>
+
+    <label>
+      Your Discord (optional)
+      <input name="discord" type="text" placeholder="e.g. alexdev" />
+    </label>
+
+    <label>
+      Message
+      <textarea name="message" rows="5" placeholder="What do you need built? Timeline? Budget?" required></textarea>
+    </label>
+
+    <button type="submit" class="video-btn">Send Message</button>
+    <p id="status" class="muted" style="margin:12px 0 0;"></p>
+  </form>
+</section>
+    
     <footer>
   <p>© Nyrex — Roblox Systems Developer</p>
 
@@ -104,6 +129,51 @@
   }
 </script>
 
+<script>
+  // ✅ Paste your Discord webhook URL here:
+  const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1467096070592008278/BDdr1871DQNd_BKgZv8av62VgzGixam8aNxmU4iuI-wE2fvMEAS0d7B5zWk0xNZHi5QP";
+
+  const form = document.getElementById("contactForm");
+  const statusEl = document.getElementById("status");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    // Basic anti-spam: disable button briefly
+    const btn = form.querySelector("button[type='submit']");
+    btn.disabled = true;
+    statusEl.textContent = "Sending...";
+
+    const data = new FormData(form);
+    const name = (data.get("name") || "").toString().trim();
+    const discord = (data.get("discord") || "").toString().trim();
+    const message = (data.get("message") || "").toString().trim();
+
+    const content =
+      `📩 **New Portfolio Message**\n` +
+      `**Name:** ${name}\n` +
+      (discord ? `**Discord:** ${discord}\n` : "") +
+      `**Message:**\n${message}`;
+
+    try {
+      const res = await fetch(DISCORD_WEBHOOK_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ content })
+      });
+
+      if (!res.ok) throw new Error("Failed to send");
+
+      form.reset();
+      statusEl.textContent = "Sent! I’ll reply on Discord.";
+    } catch (err) {
+      statusEl.textContent = "Error sending. Try again later or contact me on Discord: nyrexdev";
+    } finally {
+      btn.disabled = false;
+    }
+  });
+</script>
+  
 </body>
 </html>
 
